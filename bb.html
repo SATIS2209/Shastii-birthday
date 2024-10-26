@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Surprise</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fce4ec, #f8bbd0);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1, h2 {
+            font-family: 'Dancing Script', cursive;
+            color: #e91e63;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+        }
+
+        p {
+            color: #333;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        #countdown {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #e91e63;
+            margin: 1rem 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .btn {
+            background-color: #e91e63;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.2rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            background-color: #c2185b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+
+        .btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        #button-message {
+            margin-top: 1rem;
+            font-style: italic;
+            color: #666;
+        }
+
+        .heart {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background-color: #e91e63;
+            transform: rotate(45deg);
+            animation: float 4s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            background-color: #e91e63;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .heart::before {
+            left: -10px;
+        }
+
+        .heart::after {
+            top: -10px;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: rotate(45deg) translate(0, 0); }
+            50% { transform: rotate(45deg) translate(0, -20px); }
+        }
+
+        #password-page, #celebration-page {
+            display: none;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .cake {
+            width: 200px;
+            height: 200px;
+            background: #f9c5d5;
+            border-radius: 50%;
+            position: relative;
+            margin: 50px auto;
+            box-shadow: inset 0 -20px 0 #e8a3b8, 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .cake::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 40px;
+            background: #f06292;
+            bottom: 0;
+            border-radius: 0 0 100px 100px;
+        }
+
+        .candle {
+            width: 10px;
+            height: 50px;
+            background: linear-gradient(to bottom, #fdd835, #f9a825);
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 5px;
+        }
+
+        .flame {
+            width: 15px;
+            height: 30px;
+            background: #ff9800;
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 50% 50% 20% 20%;
+            box-shadow: 0 0 10px #ff9800, 0 0 20px #ff9800, 0 0 30px #ff9800;
+            animation: flicker 0.5s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scale(1); opacity: 0.9; }
+            100% { transform: translateX(-50%) scale(0.9); opacity: 1; }
+        }
+
+        .frosting {
+            position: absolute;
+            width: 180px;
+            height: 60px;
+            background: #f48fb1;
+            top: 20px;
+            left: 10px;
+            border-radius: 50%;
+        }
+
+        .frosting::before,
+        .frosting::after {
+            content: '';
+            position: absolute;
+            background: #f48fb1;
+            border-radius: 50%;
+        }
+
+        .frosting::before {
+            width: 140px;
+            height: 40px;
+            top: -20px;
+            left: 20px;
+        }
+
+        .frosting::after {
+            width: 100px;
+            height: 30px;
+            top: -35px;
+            left: 40px;
+        }
+
+        .poem {
+            background-color: #fff5f8;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-top: 2rem;
+        }
+
+        .poem p {
+            margin-bottom: 1rem;
+            font-style: italic;
+            color: #333;
+        }
+
+        .signature {
+            text-align: right;
+            font-weight: bold;
+            color: #e91e63;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 1rem;
+            border: 2px solid #e91e63;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .card, #password-page, #celebration-page {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            #countdown {
+                font-size: 2rem;
+            }
+
+            .cake {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card" id="countdown-page">
+            <h1>Birthday Countdown</h1>
+            <div id="countdown"></div>
+            <button id="special-button" class="btn" disabled>Birthday Surprise</button>
+            <p id="button-message"></p>
+        </div>
+
+        <div id="password-page">
+            <h2>Enter the Secret Password</h2>
+            <p>To reveal your gift, please enter the secret password:</p>
+            <input type="text" id="password-input" placeholder="Enter password">
+            <button id="submit-password" class="btn">Submit</button>
+            <p id="password-message"></p>
+        </div>
+
+        <div id="celebration-page">
+            <h1>Happy Birthday, My PONDATIII!!!</h1>
+            <div class="cake">
+                <div class="candle">
+                    <div class="flame"></div>
+                </div>
+                <div class="frosting"></div>
+            </div>
+            <p>Make a wish and blow out the candle!</p>
+            <button id="blow-candle" class="btn">Blow Out the Candle</button>
+            <div id="tamil-message" style="display:none;">
+                <h2>A SMALL GIFT FOR MY LITTLE GIRL</h2>
+                <div class="poem">
+                    <p>உன்னை முதல் முதல் பார்த்த அந்த ஐம்பது நிமிடங்கள் தான்,<br>
+                    என் நெஞ்சத்தில் ஐந்து வருடங்களாய் கணக்குதடி.</p>
+                    <p>நீயும் எனக்குப் பதில் பேசாமல்,<br>
+                    உன் பார்வையால் மட்டும் என்னை பார்த்த அந்த நொடி,<br>
+                    என்னுள் நூறு கேள்விகளாய் கனிந்தடி.<br>
+                    கனவு என்று நினைத்துப் புயர்ந்து பார்த நொடி,<br>
+                    நீ அங்கேயே இருந்தாய், நிஜமாடி.</p>
+                    <p>அந்த ஐம்பது நிமிடங்கள்,<br>
+                    என்னுள் காலம் தாண்டிய ஓர் நிமிடமாய் உருமாறியதடி.<br>
+                    அதிலிருந்து இன்று வரை,<br>
+                    உன் நினைவுகளால் என் உலகம் நிறைந்தடி.</p>
+                    <p>உன் பார்வையிலி சில நிமிடம் !<br>
+                    பயத்தோடி சில நிமிடம் !<br>
+                    உன்னைக் கெட்டி அணைத்த வாரு கண்ணீரில் சில நிமிடம் !<br>
+                    இலக்கணமே பாராமல் உன் முத்தத்தில் சில நிமிடம்<br>
+                    காலம் கடந்த பின்பும் அலியாதடி !</p>
+                    <p class="signature">அன்புள்ள, <br>உணது நான்</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const birthdayDate = new Date('2024-11-10T00:00:00').getTime();
+        const countdownElement = document.getElementById('countdown');
+        const specialButton = document.getElementById('special-button');
+        const buttonMessage = document.getElementById('button-message');
+        const countdownPage = document.getElementById('countdown-page');
+        const passwordPage = document.getElementById('password-page');
+        const celebrationPage = document.getElementById('celebration-page');
+        const passwordInput = document.getElementById('password-input');
+        const submitPassword = document.getElementById('submit-password');
+        const passwordMessage = document.getElementById('password-message');
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.top = Math.random() * 100 + 'vh';
+            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+
+        setInterval(createHeart, 300);
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = birthdayDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+            if (now >= birthdayDate) {
+                specialButton.disabled = false;
+                buttonMessage.textContent = "It's your birthday! Click the button for a special surprise!";
+                clearInterval(countdownTimer);
+                countdownElement.innerHTML = "Happy Birthday!";
+            } else {
+                specialButton.disabled = true;
+                buttonMessage.textContent = "This button will be active on your birthday!";
+            }
+        }
+
+        const countdownTimer = setInterval(updateCountdown, 1000);
+
+        specialButton.addEventListener('click', function() {
+            countdownPage.style.display = 'none';
+            passwordPage.style.display = 'block';
+        });
+
+        submitPassword.addEventListener('click', function() {
+            const enteredPassword = passwordInput.value.trim().toUpperCase();
+            if (enteredPassword === 'SHASTII') {
+                passwordPage.style.display = 'none';
+                celebrationPage.style.display =   'block';
+            } else {
+                passwordMessage.textContent = 'Incorrect password. Please try again.';
+                passwordMessage.style.color = 'red';
+            }
+        });
+
+        document.getElementById('blow-candle').addEventListener('click', function() {
+            const flame = document.querySelector('.flame');
+            flame.style.opacity = '0';
+            this.textContent = 'Your wish has been made!';
+            this.disabled = true;
+            document.getElementById('tamil-message').style.display = 'block';
+        });
+
+        // Check if it's already past the birthday when the page loads
+        if (new Date().getTime() >= birthdayDate) {
+            specialButton.disabled = false;
+            buttonMessage.textContent = "It's your birthday! Click the button for a special surprise!";
+            countdownElement.innerHTML = "Happy Birthday!";
+        }
+    </script>
+</body>
+</html>
